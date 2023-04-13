@@ -157,7 +157,7 @@ class Kocka:
         for i in range(3):
             print('   ' + ''.join(matrices[5][i]))
 
-    # Pozvati funciju za ocitavanje stanja kocke (true/false)
+    # Pozvati funciju za ocitavanje stanja rjesenosti kocke (true/false)
 
     def rjesenakocka(self):
         global poz_F, poz_R, poz_L, poz_B, poz_D, poz_U
