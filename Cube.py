@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 import random
 
@@ -248,6 +250,28 @@ class Kocka:
             self.D[2][i] = R_vec[0][2 - i]
 
     # Printa kocku u konzoli za jednostavno iscitavanje
+    def rot_x(self):
+        U = copy.deepcopy(self.U)
+        F = copy.deepcopy(self.F)
+        D = copy.deepcopy(self.D)
+        B = copy.deepcopy(self.B)
+        self.F = D
+        self.D = B
+        self.U = F
+        self.B = U
+        self.R = np.rot90(self.R, k=3, axes=(0, 1))
+        self.L = np.rot90(self.L, k=1, axes=(0, 1))
+    def rot_y_inv(self):
+        L = copy.deepcopy(self.L)
+        R = copy.deepcopy(self.R)
+        F = copy.deepcopy(self.F)
+        B = copy.deepcopy(self.B)
+        self.F = L
+        self.R = F
+        self.L = np.rot90(B, k=2, axes=(0, 1))
+        self.B = np.rot90(R, k=2, axes=(0, 1))
+        self.U = np.rot90(self.U, k=1, axes=(0, 1))
+        self.D = np.rot90(self.D, k=3, axes=(0, 1))
 
     def printaj_kocku(self):
         matrices = [self.U, self.L, self.F, self.R, self.D, self.B]
@@ -304,6 +328,10 @@ class Kocka:
                 self.rotacijaD()
             elif move == "D'":
                 self.rotacijaD_inv()
+            elif move == "x":
+                self.rot_x()
+            elif move == "y'":
+                self.rot_y_inv()
             i += 1
 
 
@@ -312,6 +340,7 @@ class Kocka:
 
     def scramble(self):
         moves = ''.join(random.choices("ULFRBD", k=random.randint(100, 200)))
+        print(moves)
         self.unos_poteza(moves)
 
 
