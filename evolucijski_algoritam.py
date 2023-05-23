@@ -56,7 +56,8 @@ potezi = [
     "U' L' U R U' L U R'",
     "R'U'RRURUR'U'RURU'RU'R'UU",
     "x",
-    "y'"
+    "y'",
+
 ]
 
 kocka = Kocka()
@@ -83,8 +84,10 @@ class Individual:
 # Definirajte funkciju za evaluaciju fitnessa
 def evaluate_fitness(individual):
     kocka_copy = copy.deepcopy(kocka)
+    moves = ""
     for move in individual.moves:
-        kocka_copy.unos_poteza(move)
+        moves += move
+    kocka_copy.unos_poteza(moves)
     # Count the number of correctly placed stickers
     fitness = 0
     faces = [('U', kocka_copy.U), ('L', kocka_copy.L), ('F', kocka_copy.F), ('R', kocka_copy.R), ('D', kocka_copy.D), ('B', kocka_copy.B)]
@@ -100,15 +103,15 @@ def evaluate_fitness(individual):
 def select_parents(population):
     fitness_values = [evaluate_fitness(individual) for individual in population]
     sorted_indices = sorted(range(len(population)), key=lambda k: fitness_values[k], reverse=True)
-    best_indices = sorted_indices[:int(len(population) * 0.2)]  # Select top 20% individuals
+    best_indices = sorted_indices[:int(len(population) * 0.05)]  # Select top 20% individuals
     parents = [population[index] for index in best_indices]
     return parents
 
 
 # Definirajte funkciju za križanje roditelja
 def crossover_parents(parent1, parent2):
-    child1 = parent1
-    child2 = parent2
+    child1 = parent1.copy()
+    child2 = parent2.copy()
     index = random.randint(0, min(len(child1.moves), len(child2.moves)) - 1)
     child1.moves[index] = parent2.moves[index]
     child2.moves[index] = parent1.moves[index]
@@ -118,14 +121,11 @@ def crossover_parents(parent1, parent2):
 # Definirajte funkciju za mutaciju jedinke
 def mutate_individual(individual):
     new_individual = individual.copy()
-    if random.random() < 0.15:
+    if random.random() < 0.5:
         new_individual.add_move("x")
-    if random.random() < 0.15:
+    if random.random() < 0.5:
         new_individual.add_move("y'")
     if random.random() < 0.5:
-        # Add a random move
-        new_individual.add_move(random.choice(potezi))
-    if random.random() < 0.25:
         # Add a random move
         new_individual.add_move(random.choice(potezi))
     else:
@@ -188,10 +188,10 @@ def initialize_population(population_size, min_moves, max_moves):
 
 
 # Parametri evolucijskog algoritma
-population_size = 500
+population_size = 200
 generations = 300
 min_moves = 3
-max_moves = 12
+max_moves = 10
 # Pokretanje evolucijskog algoritma
 best_individual = evolutionary_algorithm(population_size, generations, min_moves, max_moves)
 # Ispis rezultata
