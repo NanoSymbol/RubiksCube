@@ -273,6 +273,19 @@ class Kocka:
         self.U = np.rot90(self.U, k=1, axes=(0, 1))
         self.D = np.rot90(self.D, k=3, axes=(0, 1))
 
+    def rot_z(self):
+        self.F = np.rot90(self.F, k=1, axes=(0, 1))
+        self.B = np.rot90(self.B, k=3, axes=(0, 1))
+        L = copy.deepcopy(self.L)
+        R = copy.deepcopy(self.R)
+        D = copy.deepcopy(self.D)
+        U = copy.deepcopy(self.U)
+        self.U = R
+        self.L = U
+        self.D = np.rot90(L, k=2, axes=(0, 1))
+        self.R = np.rot90(D, k=2, axes=(0, 1))
+
+
     def printaj_kocku(self):
         matrices = [self.U, self.L, self.F, self.R, self.D, self.B]
         for i in range(3):
@@ -298,41 +311,35 @@ class Kocka:
     # Unos poteza kao string npr. |kocka.unos_poteza("URRFBDDL")|
 
     def unos_poteza(self, potezi):
-        i = 0
-        while i < len(potezi):
-            move = potezi[i]
-            if i != len(potezi) - 1 and potezi[i+1] == "'":
-                move += "'"
+        moves_dict = {
+            'U': self.rotacijaU,
+            "U'": self.rotacijaU_inv,
+            'L': self.rotacijaL,
+            "L'": self.rotacijaL_inv,
+            'F': self.rotacijaF,
+            "F'": self.rotacijaF_inv,
+            'R': self.rotacijaR,
+            "R'": self.rotacijaR_inv,
+            'B': self.rotacijaB,
+            "B'": self.rotacijaB_inv,
+            'D': self.rotacijaD,
+            "D'": self.rotacijaD_inv,
+            "x": self.rot_x,
+            "y'": self.rot_y_inv,
+            "z": self.rot_z
+        }
+
+        for block in potezi:
+            i = 0
+            while i < len(block):
+                move = block[i]
+                if i < len(block) - 1 and block[i + 1] == "'":
+                    move += "'"
+                    i += 1
+                if move in moves_dict:
+                    moves_dict[move]()
                 i += 1
-            if move == 'U':
-                self.rotacijaU()
-            elif move == "U'":
-                self.rotacijaU_inv()
-            elif move == 'L':
-                self.rotacijaL()
-            elif move == "L'":
-                self.rotacijaL_inv()
-            elif move == 'F':
-                self.rotacijaF()
-            elif move == "F'":
-                self.rotacijaF_inv()
-            elif move == 'R':
-                self.rotacijaR()
-            elif move == "R'":
-                self.rotacijaR_inv()
-            elif move == 'B':
-                self.rotacijaB()
-            elif move == "B'":
-                self.rotacijaB_inv()
-            elif move == 'D':
-                self.rotacijaD()
-            elif move == "D'":
-                self.rotacijaD_inv()
-            elif move == "x":
-                self.rot_x()
-            elif move == "y'":
-                self.rot_y_inv()
-            i += 1
+
 
 
 
