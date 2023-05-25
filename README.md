@@ -33,6 +33,6 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Pogram pokrenuti s (>'python Evolucijski_v2.py') 
 
 # Poznati bug-ovi
-* U rjetkim slučajevima dogodi se nepoznat ilegalan potez i kocka postane nerješiva
+* U rjetkim slučajevima dogodi se nepoznat ilegalan potez i kocka postane nerješiva(treba ponovo pokrenuti program)
 * 3d vizualizacija precrtava elemente jedna preko druge pa mogu biti par pogrešno prikazanih elemenata
 * Nije poznato postoje li slučajevi pri kojima se kocka ne može rješiti(fali neki određen algoritam)
