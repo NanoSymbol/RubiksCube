@@ -14,5 +14,5 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Sastoji se od 12 poteza kocke ["U ", "R ", "L ", "D ", "F ", "B ", "U' ", "R' ", "L' ", "D' ", "F' ", "B' "]
 * Slovo označava na kojem licu kocke se odvija potez, potezi bez " ' " su u smjeru kazaljke na satu, dok oni s " ' " označavaju poteze u smjeru suprotnom od kazaljke na satu
 * Rotiranje kocke se odvija u 3 osi ["x", "y", "z"]
-## Primjer rotacije U
+* Primjer rotacije U
 ![RotacijaU](https://github.com/NanoSymbol/RubiksCube/blob/main/rotacijaU.jpg)
