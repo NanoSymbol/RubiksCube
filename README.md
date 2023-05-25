@@ -27,6 +27,11 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Kada je fitness jednak 54 kocka je rješena
 * Parametri (populacija:200, generacije:500, min/max potezi(pri generiranju prve populacije): 2/4, postotak elitizma - 6%)
 
+# Pokretanje algoritma
+* Staviti u isti folder Cube_v2.py, Evolucijski_v2.py, GrafickiPrikaz.py
+* Instalirati potrebne bibioteke ako je potrebno ('pip install matplotlib' i 'pip install numpy')
+* Pogram pokrenuti s (>'python Evolucijski_v2.py') 
+
 # Poznati bug-ovi
 * U rjetkim slučajevima dogodi se nepoznat ilegalan potez i kocka postane nerješiva
 * 3d vizualizacija precrtava elemente jedna preko druge pa mogu biti par pogrešno prikazanih elemenata
