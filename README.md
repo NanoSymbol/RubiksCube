@@ -32,6 +32,13 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Instalirati potrebne bibioteke ako je potrebno ('pip install matplotlib' i 'pip install numpy')
 * Pogram pokrenuti s (>'python Evolucijski_v2.py') 
 
+# Provjera rješenja
+* Program na početku daje Scramble(set poteza kojima se izmješala kocka)
+* Krajnje rješenje dava set poteza da se rješi kocka za taj Scramble(pri pokretanju programa se svaki put nasumično izmješa)
+* Na stranici https://alg.cubing.net/ postoji dobra simulacija rubikove kocke koja služi za provjeru
+* U polje Setup na stranici unjeti set poteza od Scramble
+* U polje moves unjeti krajnje rješenje i može se viditi je li rješenje točno(kursor treba biti postavljen na zadnjem potezu(Moves) na stranici)
+
 # Poznati bug-ovi
 * U rjetkim slučajevima dogodi se nepoznat ilegalan potez i kocka postane nerješiva(treba ponovo pokrenuti program)
 * 3d vizualizacija precrtava elemente jedna preko druge pa mogu biti par pogrešno prikazanih elemenata
