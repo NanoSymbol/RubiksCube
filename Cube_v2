@@ -247,7 +247,6 @@ class Kocka:
             tocnih += np.sum(face == center)
         return tocnih
 
-    import matplotlib.pyplot as plt
 
 
 
