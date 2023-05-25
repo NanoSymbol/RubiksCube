@@ -35,4 +35,5 @@ Potrebne bibilioteke"matplotlib,numpy"
 # Poznati bug-ovi
 * U rjetkim slučajevima dogodi se nepoznat ilegalan potez i kocka postane nerješiva(treba ponovo pokrenuti program)
 * 3d vizualizacija precrtava elemente jedna preko druge pa mogu biti par pogrešno prikazanih elemenata
+* 3d vizualizacija zatvara i otvara prozor umjesto updejtanja novog stanja
 * Nije poznato postoje li slučajevi pri kojima se kocka ne može rješiti(fali neki određen algoritam)
