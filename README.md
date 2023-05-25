@@ -15,10 +15,10 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Slovo označava na kojem licu kocke se odvija potez, potezi bez " ' " su u smjeru kazaljke na satu, dok oni s " ' " označavaju poteze u smjeru suprotnom od kazaljke na satu
 * Rotiranje kocke se odvija u 3 osi ["x", "y", "z"]
 ## Primjer rotacije U
-'def rotacijaU(self):
-        self.U = np.rot90(self.U, k=1, axes=(1, 0))
-        B_vec, L_vec, R_vec, F_vec = self.B[2, :].copy(), self.L[0, :].copy(), self.R[0, :].copy(), self.F[0, :].copy()
-        self.B[2, :] = L_vec[::-1]
-        self.F[0, :] = R_vec
-        self.L[0, :] = F_vec
-        self.R[0, :] = B_vec[::-1]'
+'def rotacijaU(self):'
+'       self.U = np.rot90(self.U, k=1, axes=(1, 0))'
+'       B_vec, L_vec, R_vec, F_vec = self.B[2, :].copy(), self.L[0, :].copy(), self.R[0, :].copy(), self.F[0, :].copy()'
+'       self.B[2, :] = L_vec[::-1]'
+'       self.F[0, :] = R_vec'
+'       self.L[0, :] = F_vec'
+'       self.R[0, :] = B_vec[::-1]'
