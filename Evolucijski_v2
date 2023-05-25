@@ -1,12 +1,10 @@
 import copy
 import random
-import numpy as np
 from Cube import Kocka
 from GrafickiPrikaz import PrikazKocke
 import matplotlib.pyplot as plt
-import cProfile
 
-# Definirajte predefinirani set permutacija poteza kocke
+# definirane rotacije i potezi
 rotacije = ["x ", "y' "]
 pune_rotacije = ["x x ", "y' y' "]
 potezi = [
@@ -90,7 +88,7 @@ kocka_prikaz = PrikazKocke(kocka)
 kocka_prikaz.prikazi_kocku()
 
 
-# Definirajte klasu za jedinku (rješenje)
+# jedinka
 class Individual:
     def __init__(self, moves=None):
         if moves is None:
@@ -108,7 +106,7 @@ class Individual:
         return "".join(self.moves)
 
 
-# Definirajte funkciju za evaluaciju fitnessa
+# evaluacija fitnessa jedinke
 def evaluate_fitness(individual):
     kocka_copy = copy.deepcopy(kocka)
     kocka_copy.unos_poteza(individual.moves)
@@ -116,7 +114,7 @@ def evaluate_fitness(individual):
     return fitness
 
 
-# Definirajte funkciju za odabir roditelja na temelju fitnessa
+# sortiranje roditelja po fitnessu
 def select_parents(population, fitness_values):
     best_indices = sorted(range(len(population)), key=lambda i: fitness_values[i], reverse=True)[:int(len(population) * 0.06)]
     parents = [population[index] for index in best_indices]
@@ -124,7 +122,7 @@ def select_parents(population, fitness_values):
 
 
 
-# Definirajte funkciju za križanje roditelja
+# krizanje roditelja
 def crossover_parents(parent1, parent2):
     child1 = parent1.copy()
     child2 = parent2.copy()
@@ -197,9 +195,9 @@ def evolutionary_algorithm(population_size, generations, min_moves, max_moves):
         prikaz_kocke_3d = PrikazKocke(kocka_temp)
         prikaz_kocke_3d.prikazi_kocku()
         plt.pause(0.1)
-        if max_fitness == 54:  # Rubik's Cube is solved
+        if max_fitness == 54:  # Kocka rjesena
             break
-    # Pronađite najbolju jedinku nakon završetka generacija
+    # Najbolja jedinka
     best_individual = max(population, key=evaluate_fitness)
     return best_individual
 
@@ -213,16 +211,15 @@ def initialize_population(population_size, min_moves, max_moves):
     return population
 
 
-# Parametri evolucijskog algoritma
+# parametri evolucijskog algoritma
 population_size = 200
 generations = 500
 min_moves = 2
 max_moves = 4
-#if __name__ == "__main__":
-#   cProfile.run('evolutionary_algorithm(population_size, generations, min_moves, max_moves)')
-# Pokretanje evolucijskog algoritma
 best_individual = evolutionary_algorithm(population_size, generations, min_moves, max_moves)
-# Ispis rezultata
+
+# ispis rezultata
+
 print("Najbolja jedinka:", best_individual)
 kocka.unos_poteza(best_individual.moves)
 prikaz_kocke = PrikazKocke(kocka)
