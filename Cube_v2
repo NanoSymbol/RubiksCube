@@ -1,5 +1,5 @@
 import copy
-
+import matplotlib.pyplot as plt
 import numpy as np
 import random
 
@@ -29,6 +29,7 @@ poz_F = np.array([['G', 'G', 'G'],
                   ['G', 'G', 'G'],
                   ['G', 'G', 'G']])
 
+osnovni_potezi = ["U ", "R ", "L ", "D ", "F "]
 
 class Kocka:
 
@@ -45,207 +46,100 @@ class Kocka:
     # Rotacije kocke | Dodati i counterclockwise rotacije kasnije
     def rotacijaU(self):
         self.U = np.rot90(self.U, k=1, axes=(1, 0))
-        B_vec = np.array([['', '', '']])
-        L_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        F_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[2][i]
-            L_vec[0][i] = self.L[0][i]
-            F_vec[0][i] = self.F[0][i]
-            R_vec[0][i] = self.R[0][i]
-        for i in range(3):
-            self.B[2][i] = L_vec[0][2 - i]
-            self.F[0][i] = R_vec[0][i]
-            self.L[0][i] = F_vec[0][i]
-            self.R[0][i] = B_vec[0][2 - i]
+        B_vec, L_vec, R_vec, F_vec = self.B[2, :].copy(), self.L[0, :].copy(), self.R[0, :].copy(), self.F[0, :].copy()
+        self.B[2, :] = L_vec[::-1]
+        self.F[0, :] = R_vec
+        self.L[0, :] = F_vec
+        self.R[0, :] = B_vec[::-1]
 
     def rotacijaU_inv(self):
         self.U = np.rot90(self.U, k=1, axes=(0, 1))
-        B_vec = np.array([['', '', '']])
-        L_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        F_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[2][i]
-            L_vec[0][i] = self.L[0][i]
-            F_vec[0][i] = self.F[0][i]
-            R_vec[0][i] = self.R[0][i]
-        for i in range(3):
-            self.B[2][i] = R_vec[0][2 - i]
-            self.F[0][i] = L_vec[0][i]
-            self.L[0][i] = B_vec[0][2 - i]
-            self.R[0][i] = F_vec[0][i]
+        B_vec, L_vec, R_vec, F_vec = self.B[2, :].copy(), self.L[0, :].copy(), self.R[0, :].copy(), self.F[0, :].copy()
+        self.B[2, :] = R_vec[::-1]
+        self.F[0, :] = L_vec
+        self.L[0, :] = B_vec[::-1]
+        self.R[0, :] = F_vec
 
     def rotacijaD(self):
         self.D = np.rot90(self.D, k=1, axes=(1, 0))
-        F_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        L_vec = np.array([['', '', '']])
-        B_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[0][i]
-            L_vec[0][i] = self.L[2][i]
-            F_vec[0][i] = self.F[2][i]
-            R_vec[0][i] = self.R[2][i]
-        for i in range(3):
-            self.B[0][i] = R_vec[0][2 - i]
-            self.F[2][i] = L_vec[0][i]
-            self.L[2][i] = B_vec[0][2 - i]
-            self.R[2][i] = F_vec[0][i]
+        F_vec, R_vec, L_vec, B_vec = self.F[2, :].copy(), self.R[2, :].copy(), self.L[2, :].copy(), self.B[0, :].copy()
+        self.B[0, :] = R_vec[::-1]
+        self.F[2, :] = L_vec
+        self.L[2, :] = B_vec[::-1]
+        self.R[2, :] = F_vec
 
     def rotacijaD_inv(self):
         self.D = np.rot90(self.D, k=1, axes=(0, 1))
-        F_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        L_vec = np.array([['', '', '']])
-        B_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[0][i]
-            L_vec[0][i] = self.L[2][i]
-            F_vec[0][i] = self.F[2][i]
-            R_vec[0][i] = self.R[2][i]
-        for i in range(3):
-            self.B[0][i] = L_vec[0][2 - i]
-            self.F[2][i] = R_vec[0][i]
-            self.L[2][i] = F_vec[0][i]
-            self.R[2][i] = B_vec[0][2 - i]
+        F_vec, R_vec, L_vec, B_vec = self.F[2, :].copy(), self.R[2, :].copy(), self.L[2, :].copy(), self.B[0, :].copy()
+        self.B[0, :] = L_vec[::-1]
+        self.F[2, :] = R_vec
+        self.L[2, :] = F_vec
+        self.R[2, :] = B_vec[::-1]
 
     def rotacijaR(self):
         self.R = np.rot90(self.R, k=1, axes=(1, 0))
-        B_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        U_vec = np.array([['', '', '']])
-        F_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[i][2]
-            D_vec[0][i] = self.D[i][2]
-            F_vec[0][i] = self.F[i][2]
-            U_vec[0][i] = self.U[i][2]
-        for i in range(3):
-            self.B[i][2] = U_vec[0][i]
-            self.U[i][2] = F_vec[0][i]
-            self.F[i][2] = D_vec[0][i]
-            self.D[i][2] = B_vec[0][i]
+        B_vec, D_vec, U_vec, F_vec = self.B[:, 2].copy(), self.D[:, 2].copy(), self.U[:, 2].copy(), self.F[:, 2].copy()
+        self.B[:, 2] = U_vec
+        self.U[:, 2] = F_vec
+        self.F[:, 2] = D_vec
+        self.D[:, 2] = B_vec
 
     def rotacijaR_inv(self):
         self.R = np.rot90(self.R, k=1, axes=(0, 1))
-        B_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        U_vec = np.array([['', '', '']])
-        F_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[i][2]
-            D_vec[0][i] = self.D[i][2]
-            F_vec[0][i] = self.F[i][2]
-            U_vec[0][i] = self.U[i][2]
-        for i in range(3):
-            self.B[i][2] = D_vec[0][i]
-            self.U[i][2] = B_vec[0][i]
-            self.F[i][2] = U_vec[0][i]
-            self.D[i][2] = F_vec[0][i]
+        B_vec, D_vec, U_vec, F_vec = self.B[:, 2].copy(), self.D[:, 2].copy(), self.U[:, 2].copy(), self.F[:, 2].copy()
+        self.B[:, 2] = D_vec
+        self.U[:, 2] = B_vec
+        self.F[:, 2] = U_vec
+        self.D[:, 2] = F_vec
 
     def rotacijaL(self):
         self.L = np.rot90(self.L, k=1, axes=(1, 0))
-        B_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        U_vec = np.array([['', '', '']])
-        F_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[i][0]
-            D_vec[0][i] = self.D[i][0]
-            F_vec[0][i] = self.F[i][0]
-            U_vec[0][i] = self.U[i][0]
-        for i in range(3):
-            self.B[i][0] = D_vec[0][i]
-            self.U[i][0] = B_vec[0][i]
-            self.F[i][0] = U_vec[0][i]
-            self.D[i][0] = F_vec[0][i]
+        B_vec, D_vec, U_vec, F_vec = self.B[:, 0].copy(), self.D[:, 0].copy(), self.U[:, 0].copy(), self.F[:, 0].copy()
+        self.B[:, 0] = D_vec
+        self.U[:, 0] = B_vec
+        self.F[:, 0] = U_vec
+        self.D[:, 0] = F_vec
 
     def rotacijaL_inv(self):
         self.L = np.rot90(self.L, k=1, axes=(0, 1))
-        B_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        U_vec = np.array([['', '', '']])
-        F_vec = np.array([['', '', '']])
-        for i in range(3):
-            B_vec[0][i] = self.B[i][0]
-            D_vec[0][i] = self.D[i][0]
-            F_vec[0][i] = self.F[i][0]
-            U_vec[0][i] = self.U[i][0]
-        for i in range(3):
-            self.B[i][0] = U_vec[0][i]
-            self.U[i][0] = F_vec[0][i]
-            self.F[i][0] = D_vec[0][i]
-            self.D[i][0] = B_vec[0][i]
+        B_vec, D_vec, U_vec, F_vec = self.B[:, 0].copy(), self.D[:, 0].copy(), self.U[:, 0].copy(), self.F[:, 0].copy()
+        self.B[:, 0] = U_vec
+        self.U[:, 0] = F_vec
+        self.F[:, 0] = D_vec
+        self.D[:, 0] = B_vec
 
     def rotacijaF(self):
         self.F = np.rot90(self.F, k=1, axes=(1, 0))
-        L_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        U_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        for i in range(3):
-            L_vec[0][i] = self.L[i][2]
-            D_vec[0][i] = self.D[0][i]
-            R_vec[0][i] = self.R[i][0]
-            U_vec[0][i] = self.U[2][i]
-        for i in range(3):
-            self.L[i][2] = D_vec[0][i]
-            self.U[2][i] = L_vec[0][2 - i]
-            self.R[i][0] = U_vec[0][i]
-            self.D[0][i] = R_vec[0][2 - i]
+        L_vec, R_vec, U_vec, D_vec = self.L[:, 2].copy(), self.R[:, 0].copy(), self.U[2, :].copy(), self.D[0, :].copy()
+        self.L[:, 2] = D_vec
+        self.U[2, :] = L_vec[::-1]
+        self.R[:, 0] = U_vec
+        self.D[0, :] = R_vec[::-1]
 
     def rotacijaF_inv(self):
         self.F = np.rot90(self.F, k=1, axes=(0, 1))
-        L_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        U_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        for i in range(3):
-            L_vec[0][i] = self.L[i][2]
-            D_vec[0][i] = self.D[0][i]
-            R_vec[0][i] = self.R[i][0]
-            U_vec[0][i] = self.U[2][i]
-        for i in range(3):
-            self.L[i][2] = U_vec[0][2 - i]
-            self.U[2][i] = R_vec[0][i]
-            self.R[i][0] = D_vec[0][2 - i]
-            self.D[0][i] = L_vec[0][i]
+        L_vec, R_vec, U_vec, D_vec = self.L[:, 2].copy(), self.R[:, 0].copy(), self.U[2, :].copy(), self.D[0, :].copy()
+        self.L[:, 2] = U_vec[::-1]
+        self.U[2, :] = R_vec
+        self.R[:, 0] = D_vec[::-1]
+        self.D[0, :] = L_vec
 
     def rotacijaB(self):
         self.B = np.rot90(self.B, k=1, axes=(1, 0))
-        U_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        L_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        for i in range(3):
-            L_vec[0][i] = self.L[i][0]
-            D_vec[0][i] = self.D[2][i]
-            R_vec[0][i] = self.R[i][2]
-            U_vec[0][i] = self.U[0][i]
-        for i in range(3):
-            self.L[i][0] = U_vec[0][2 - i]
-            self.U[0][i] = R_vec[0][i]
-            self.R[i][2] = D_vec[0][2 - i]
-            self.D[2][i] = L_vec[0][i]
+        U_vec, R_vec, L_vec, D_vec = self.U[0, :].copy(), self.R[:, 2].copy(), self.L[:, 0].copy(), self.D[2, :].copy()
+        self.L[:, 0] = U_vec[::-1]
+        self.U[0, :] = R_vec
+        self.R[:, 2] = D_vec[::-1]
+        self.D[2, :] = L_vec
 
     def rotacijaB_inv(self):
         self.B = np.rot90(self.B, k=1, axes=(0, 1))
-        U_vec = np.array([['', '', '']])
-        R_vec = np.array([['', '', '']])
-        L_vec = np.array([['', '', '']])
-        D_vec = np.array([['', '', '']])
-        for i in range(3):
-            L_vec[0][i] = self.L[i][0]
-            D_vec[0][i] = self.D[2][i]
-            R_vec[0][i] = self.R[i][2]
-            U_vec[0][i] = self.U[0][i]
-        for i in range(3):
-            self.L[i][0] = D_vec[0][i]
-            self.U[0][i] = L_vec[0][2 - i]
-            self.R[i][2] = U_vec[0][i]
-            self.D[2][i] = R_vec[0][2 - i]
+        U_vec, R_vec, L_vec, D_vec = self.U[0, :].copy(), self.R[:, 2].copy(), self.L[:, 0].copy(), self.D[2, :].copy()
+        self.L[:, 0] = D_vec
+        self.U[0, :] = L_vec[::-1]
+        self.R[:, 2] = U_vec
+        self.D[2, :] = R_vec[::-1]
+
 
 
 
@@ -339,9 +233,21 @@ class Kocka:
     # Provodi nasumicne poteze na kocki da ju izmjesa
 
     def scramble(self):
-        moves = ''.join(random.choices("U R F L D B ", k=random.randint(100, 200)))
+        moves = ''.join(random.choices(osnovni_potezi, k=random.randint(50, 100)))
+        print("Scramble: " + moves)
         moves.split(" ")
-        print(moves)
         self.unos_poteza(moves)
+
+    def broj_tocnih(self):
+        tocnih = 0
+        # Count the number of correctly placed stickers
+        faces = [('U', self.U), ('L', self.L), ('F', self.F), ('R', self.R), ('D', self.D), ('B', self.B)]
+        for _, face in faces:
+            center = face[1, 1]
+            tocnih += np.sum(face == center)
+        return tocnih
+
+    import matplotlib.pyplot as plt
+
 
 
