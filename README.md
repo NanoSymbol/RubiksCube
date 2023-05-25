@@ -16,3 +16,14 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Rotiranje kocke se odvija u 3 osi ["x", "y", "z"]
 * Primjer rotacije U
 ![RotacijaU](https://github.com/NanoSymbol/RubiksCube/blob/main/rotacijaU.jpg)
+
+# Evolucijski algoritam
+* Rješava kocku iz seta predefiniranih poteza na kocki
+* Dio najboljih rješenja ide u sljedeću generaciju bez modifikacija (elitizam osigurava održavanje najboljeg mogućeg rješenja, inače može algoritam nazadovati)
+* Križanje se odvija na svim članovima osim najboljih rješenja
+* Svaki član mutira na bazi šanse iz seta predodređenih mutacija (npr. nasumična rotacija i nasumični potez ili nasumična rotacija i 3 nasumična poteza)
+* Fitness se određuje brojanjem točno pozicioniranih boja na licu
+* Najbolji fitness iz generacije se ispisiva u konzolu i prikazuje vizualno
+* Kada je fitness jednak 54 kocka je rješena
+* Parametri (populacija:200, generacije:500, min/max potezi(pri generiranju prve populacije): 2/4, postotak elitizma - 6%)
+* 
