@@ -28,6 +28,6 @@ Potrebne bibilioteke"matplotlib,numpy"
 * Parametri (populacija:200, generacije:500, min/max potezi(pri generiranju prve populacije): 2/4, postotak elitizma - 6%)
 
 # Poznati bug-ovi
-* U rjetkim slučajevima dogodi se ilegalan potez i kocka postane nerješiva
+* U rjetkim slučajevima dogodi se nepoznat ilegalan potez i kocka postane nerješiva
 * 3d vizualizacija precrtava elemente jedna preko druge pa mogu biti par pogrešno prikazanih elemenata
 * Nije poznato postoje li slučajevi pri kojima se kocka ne može rješiti(fali neki određen algoritam)
