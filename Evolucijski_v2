@@ -1,0 +1,231 @@
+import copy
+import random
+import numpy as np
+from Cube import Kocka
+from GrafickiPrikaz import PrikazKocke
+import matplotlib.pyplot as plt
+import cProfile
+
+# Definirajte predefinirani set permutacija poteza kocke
+rotacije = ["x ", "y' "]
+pune_rotacije = ["x x ", "y' y' "]
+potezi = [
+    "F' L' B' R' U' R U' B L F R U R' U ",
+    "F R B L U L' U B' R' F' L' U' L U' ",
+    "B L F R U R' U F' L' B' R' U' R U' ",
+    "B' R' F' L' U' L U' F R B L U L' U ",
+    "U U B U U B' R R F R' F' U U F' U U F R' ",
+    "U' U' B' U' U' B L' L' F' L F U' U' F U' U' F' L ",
+    "U U F U U F' L L B L' B' U U B' U U B L' ",
+    "U' U' F' U' U' F R' R' B' R B U' U' B U' U' B' R ",
+    "U U R U U R' F F L F' L' U U L' U U L F' ",
+    "U' U' L' U' U' L F' F' R' F R U' U' R U' U' R' F ",
+    "U U L U U L' B B R B' R' U U R' U U R B' ",
+    "U' U' R' U' U' R B' B' L' B L U' U' L U' U' L' B ",
+    "U' B B D D L' F F D D B B R' U' ",
+    "U B' B' D' D' R F' F' D' D' B' B' L U ",
+    "U' F F D D R' B B D D F F L' U' ",
+    "U F' F' D' D' L B' B' D' D' F' F' R U ",
+    "U B B D D R F F D D B B L U ",
+    "U' B' B' D' D' L' F' F' D' D' B' B' R' U' ",
+    "U F F D D L B B D D F F R U ",
+    "U' F' F' D' D' R' B' B' D' D' F' F' L' U' ",
+    "D' R' D R R U' R B B L U' L' B B U R R ",
+    "D L D' L' L' U L' B' B' R' U R B' B' U' L' L' ",
+    "D' L' D L L U L U' L F F R U' R' F F U L L ",
+    "D R D' R' R' U R' F' F' L' U L F' F' U R R' ",
+    "D L D' L' L' U L U L B B R' U R B B U' L L' ",
+    "D' R' D R R U' R' B' B' L U' L' B B' U R R' ",
+    "D R D' R' R' U R' R U R F F L' U L F F U' R R' ",
+    "D' L' D L L' U' L F' F' R U R' F' F' U L L' ",
+    "R' U L' U U R U' L R' U L' U U R U' L U' ",
+    "L U' R U' U L' U R' L U' R U' U L' U R' U ",
+    "L' U R' U U L U' R L' U R' U U L U' R' U ",
+    "R U' L' U' U R' U L R' U' L' U' U R U' L U' ",
+    "L U' R U U' R U L' U R' U U' R' U' L U ",
+    "R' U L' U' U' R U' L R' U L' U' U' R U' L' U ",
+    "R U' L' U U R' U L R' U' L' U U R U' L U' ",
+    "L' U R' U' U' L U' R L' U R' U' U' L U' R' U ",
+    "F' U B U' F U B' U' ",
+    "F U' B' U F' U' B U ",
+    "B' U F U' B U F' U' ",
+    "B U' F' U B' U' F U ",
+    "F U' B' U F' U' B U ",
+    "F' U B U' F U B' U' ",
+    "B U' F' U B' U' F U ",
+    "B' U F U' B U F' U' ",
+    "L' U U L R R F F R ",
+    "R U' U' R' L' L' F' F' L' ",
+    "L U' U' L' R' R' B' B' R' ",
+    "R' U U R L L B B L ",
+    "U' L' U R U' L U R' ",
+    "R' U' R R U R U' R' U R U R' U' ",
+    "R L R L x x U R L R L x x U U R L R L x x U R L R L x x ",
+    "F R U R' U' F' ",
+    "R U U R' U' R U' R' ",
+    "R U R' U R U' R' U R U U R' ",
+    "R U R' U R U U R' ",
+    "R R D R' U U R D' R' U U R' ",
+    "R U R' U R U' R' U' R' F R F' ",
+    "R U R' U' R' F R F' ",
+    "F R U R' U' R U R' U' F' ",
+    "F R U' R' U' R U R' F' ",
+    "R U R' U R U U R R U' R U' R' U U R ",
+    "R' U' R' F R F' U R ",
+    "R U R' U' R U' R' F' U' F R U R'",
+    "L' U U R U R' U U L ",
+    "R U' R' U R' U' R U' R' U U R ",
+    "U' R U' R' U U R U' R' U U R U R' ",
+    "R U' R R U' R U' R' U U R ",
+    "U U F F R R U U R R F F U U R R ",
+    "D D F U U R R D D B U D' R R U D L L F F D D F F ",
+    "R R U F F R R F F U U F F R R F F U R R "
+
+]
+
+kocka = Kocka()
+kocka.scramble()
+kocka.printaj_kocku()
+kocka_prikaz = PrikazKocke(kocka)
+kocka_prikaz.prikazi_kocku()
+
+
+# Definirajte klasu za jedinku (rješenje)
+class Individual:
+    def __init__(self, moves=None):
+        if moves is None:
+            self.moves = []
+        else:
+            self.moves = moves
+
+    def add_move(self, move):
+        self.moves.append(move)
+
+    def copy(self):
+        return Individual(self.moves.copy())
+
+    def __str__(self):
+        return "".join(self.moves)
+
+
+# Definirajte funkciju za evaluaciju fitnessa
+def evaluate_fitness(individual):
+    kocka_copy = copy.deepcopy(kocka)
+    kocka_copy.unos_poteza(individual.moves)
+    fitness = kocka_copy.broj_tocnih()
+    return fitness
+
+
+# Definirajte funkciju za odabir roditelja na temelju fitnessa
+def select_parents(population, fitness_values):
+    best_indices = sorted(range(len(population)), key=lambda i: fitness_values[i], reverse=True)[:int(len(population) * 0.06)]
+    parents = [population[index] for index in best_indices]
+    return parents
+
+
+
+# Definirajte funkciju za križanje roditelja
+def crossover_parents(parent1, parent2):
+    child1 = parent1.copy()
+    child2 = parent2.copy()
+    index = random.randint(0, min(len(child1.moves), len(child2.moves)) - 1)
+    child1.moves[index] = parent2.moves[index]
+    child2.moves[index] = parent1.moves[index]
+    return child1, child2
+
+
+# funkcija za mutaciju jedinke
+def mutate_individual(individual):
+    new_individual = individual.copy()
+    mutacija_tip = random.randint(0,5)
+    if mutacija_tip == 0:
+        new_individual.add_move(random.choice(potezi))
+    if mutacija_tip == 1:
+        new_individual.add_move(random.choice(potezi))
+        new_individual.add_move(random.choice(potezi))
+    if mutacija_tip == 2:
+        new_individual.add_move(random.choice(rotacije))
+        new_individual.add_move(random.choice(potezi))
+    if mutacija_tip == 3:
+        new_individual.add_move(random.choice(pune_rotacije))
+        new_individual.add_move(random.choice(potezi))
+    if mutacija_tip == 4:
+        new_individual.add_move(random.choice(pune_rotacije))
+        new_individual.add_move(random.choice(rotacije))
+        new_individual.add_move(random.choice(potezi))
+    if mutacija_tip == 5:
+        new_individual.add_move(random.choice(rotacije))
+        new_individual.add_move(random.choice(pune_rotacije))
+        new_individual.add_move(random.choice(potezi))
+    return new_individual
+
+
+
+def evolutionary_algorithm(population_size, generations, min_moves, max_moves):
+    # Inicijalizacija populacije
+    population = initialize_population(population_size, min_moves, max_moves)
+
+    for generation in range(generations):
+        new_population = []
+
+        # Evaluacija fitnessa
+        fitness_values = [evaluate_fitness(individual) for individual in population]
+
+        # Odabir roditelja
+        parents = select_parents(population, fitness_values)
+
+        # Križanje roditelja
+        for _ in range(population_size-len(parents)):
+            parent1 = random.choice(parents)
+            parent2 = random.choice(parents)
+            child1, child2 = crossover_parents(parent1, parent2)
+            new_population.append(child1)
+            new_population.append(child2)
+
+        # Mutacija
+        new_population = [mutate_individual(individual) for individual in new_population]
+
+        # Zamjena stare populacije s novom populacijom
+        population = new_population + parents
+        max_fitness = max(fitness_values)
+        best_solution = max(population, key=evaluate_fitness)
+        print(f"Generation {generation + 1}: Best Fitness = {max_fitness}, Solution = {best_solution}")
+        solucija = best_solution
+        kocka_temp = copy.deepcopy(kocka)
+        kocka_temp.unos_poteza(solucija.moves)
+        plt.close()
+        prikaz_kocke_3d = PrikazKocke(kocka_temp)
+        prikaz_kocke_3d.prikazi_kocku()
+        plt.pause(0.1)
+        if max_fitness == 54:  # Rubik's Cube is solved
+            break
+    # Pronađite najbolju jedinku nakon završetka generacija
+    best_individual = max(population, key=evaluate_fitness)
+    return best_individual
+
+# Inicijalizacija populacije
+def initialize_population(population_size, min_moves, max_moves):
+    population = []
+    for _ in range(population_size):
+        moves = random.choices(potezi, k=random.randint(min_moves, max_moves))
+        individual = Individual(moves)
+        population.append(individual)
+    return population
+
+
+# Parametri evolucijskog algoritma
+population_size = 200
+generations = 500
+min_moves = 2
+max_moves = 4
+#if __name__ == "__main__":
+#   cProfile.run('evolutionary_algorithm(population_size, generations, min_moves, max_moves)')
+# Pokretanje evolucijskog algoritma
+best_individual = evolutionary_algorithm(population_size, generations, min_moves, max_moves)
+# Ispis rezultata
+print("Najbolja jedinka:", best_individual)
+kocka.unos_poteza(best_individual.moves)
+prikaz_kocke = PrikazKocke(kocka)
+prikaz_kocke.prikazi_kocku()
+plt.show()
+print("Fitness:", evaluate_fitness(best_individual))
